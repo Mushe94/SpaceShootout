@@ -25,12 +25,11 @@ private:
 
 	void MoveForward(float value);
 	void MoveRight(float value);
+	void CharacterJump();
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-
 };

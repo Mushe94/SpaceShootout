@@ -32,6 +32,7 @@ void AFPSController::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	check(PlayerInputComponent);
 
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AFPSController::CharacterJump);
 	PlayerInputComponent->BindAxis("Forward", this, &AFPSController::MoveForward);
 	PlayerInputComponent->BindAxis("Right", this, &AFPSController::MoveRight);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
@@ -52,4 +53,9 @@ void AFPSController::MoveRight(float value)
 	{
 		AddMovementInput(GetActorRightVector(), value);
 	}
+}
+
+void AFPSController::CharacterJump()
+{
+	Jump();
 }
