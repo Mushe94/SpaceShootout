@@ -4,6 +4,7 @@
 #include "RobotEnemy.h"
 #include "Engine/World.h"
 #include "FPSController.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Engine/EngineTypes.h"
 
 // Sets default values
@@ -47,8 +48,12 @@ bool ARobotEnemy::ScanForPlayer()
 
 void ARobotEnemy::MoveToPlayer(float DeltaTime)
 {
-	if (FVector::Dist(GetActorLocation(), GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation()) < fireDistance)
+	FVector playerPosition = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
+	if (FVector::Dist(GetActorLocation(), playerPosition) < fireDistance)
 	{
+		FRotator lookRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), playerPosition);
+		lookRotation = FRotator(0.f, lookRotation.Yaw, 0.f);
+		SetActorRotation(lookRotation, ETeleportType::None);
 		SetActorLocation(GetActorLocation() + GetActorForwardVector() * speed * DeltaTime);
 	} else
 	{
