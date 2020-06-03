@@ -16,7 +16,8 @@ AFPSController::AFPSController()
 void AFPSController::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	weapon = FindComponentByClass<UWeapon>();
+	weapon->AssignOwner(GetOwner());
 }
 
 // Called every frame
@@ -32,6 +33,7 @@ void AFPSController::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	check(PlayerInputComponent);
 
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AFPSController::Fire);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AFPSController::CharacterJump);
 	PlayerInputComponent->BindAxis("Forward", this, &AFPSController::MoveForward);
 	PlayerInputComponent->BindAxis("Right", this, &AFPSController::MoveRight);
@@ -58,4 +60,9 @@ void AFPSController::MoveRight(float value)
 void AFPSController::CharacterJump()
 {
 	Jump();
+}
+
+void AFPSController::Fire()
+{
+	weapon->Fire();
 }

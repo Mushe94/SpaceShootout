@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "Engine.h"
 #include "GameFramework/Actor.h"
 #include "Bullet.generated.h"
 
@@ -21,8 +21,12 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+private:
+	UPROPERTY()
+	AActor* myOwner;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	void AssignOwner(AActor* myMaster);
 };

@@ -2,7 +2,8 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "Engine.h"
+#include "Weapon.h"
 #include "GameFramework/Character.h"
 #include "FPSController.generated.h"
 
@@ -26,6 +27,8 @@ private:
 	void MoveForward(float value);
 	void MoveRight(float value);
 	void CharacterJump();
+	void Fire();
+	UWeapon* weapon;
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 

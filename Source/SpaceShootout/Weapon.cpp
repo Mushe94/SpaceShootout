@@ -33,16 +33,15 @@ void UWeapon::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponen
 	// ...
 }
 
-void UWeapon::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
-{
-	check(PlayerInputComponent);
-
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &UWeapon::Fire);
-}
-
 void UWeapon::Fire()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Some warning message"));
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(viewDirection, viewRotation);
-	GetWorld()->SpawnActor<ABullet>(bullet, viewDirection, viewRotation);
+	ABullet* tempBullet = GetWorld()->SpawnActor<ABullet>(bullet, viewDirection, viewRotation);
+	tempBullet->AssignOwner(myOwner);
+}
+
+void UWeapon::AssignOwner(AActor* myHolder)
+{
+	myOwner = myHolder;
 }

@@ -6,6 +6,7 @@
 #include "FPSController.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/EngineTypes.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 ARobotEnemy::ARobotEnemy()
@@ -35,22 +36,27 @@ void ARobotEnemy::Tick(float DeltaTime)
 bool ARobotEnemy::ScanForPlayer()
 {
 	FHitResult hit;
-	FVector startPoint = GetActorLocation();
-	FVector forward = GetActorForwardVector();
-	FVector endPosition = startPoint + (forward * viewDistance);
+	FVector myPosition = GetActorLocation();
+	UE_LOG(LogTemp, Warning, TEXT("He is: %s"), *GetWorld()->GetFirstPlayerController()->GetPawn()->GetName());
+	FVector playerPosition = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
 	FCollisionQueryParams collisionParams;
-	if (GetWorld()->LineTraceSingleByChannel(hit, startPoint, endPosition, ECC_Visibility, collisionParams))
+	collisionParams = FCollisionQueryParams(TEXT(""), false, GetOwner());
+	DrawDebugLine(GetWorld(), myPosition, playerPosition, FColor::Green, false, 1.f, 0, 1.f);
+	if (GetWorld()->LineTraceSingleByChannel(hit, myPosition, playerPosition, ECollisionChannel::ECC_PhysicsBody, collisionParams))
 	{
-		return hit.GetActor()->GetName() == "FPSController";
+		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *hit.GetActor()->GetName()));
+		return hit.GetActor()->GetName() == "BP_FPSController_C_0";
 	}
+	UE_LOG(LogTemp, Warning, TEXT("player not found"));
 	return false;
 }
 
 void ARobotEnemy::MoveToPlayer(float DeltaTime)
 {
 	FVector playerPosition = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
-	if (FVector::Dist(GetActorLocation(), playerPosition) < fireDistance)
+	if (FVector::Dist(GetActorLocation(), playerPosition) > fireDistance)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Moving to player"));
 		FRotator lookRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), playerPosition);
 		lookRotation = FRotator(0.f, lookRotation.Yaw, 0.f);
 		SetActorRotation(lookRotation, ETeleportType::None);
@@ -59,10 +65,12 @@ void ARobotEnemy::MoveToPlayer(float DeltaTime)
 	{
 		if (fireTimer >= fireCooldown)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Firing to player"));
 			GetWorld()->SpawnActor<ABullet>(bullet);
 			fireTimer = 0.f;
 		} else
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Bullet robot cooldown"));
 			fireTimer += DeltaTime;
 		}
 	}

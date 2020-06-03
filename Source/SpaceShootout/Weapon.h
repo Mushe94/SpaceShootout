@@ -16,6 +16,7 @@ class SPACESHOOTOUT_API UWeapon : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UWeapon();
+	void Fire();
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ABullet> bullet;
@@ -25,12 +26,12 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent);
-	void Fire();
 	FVector viewDirection;
 	FRotator viewRotation;
+	AActor* myOwner;
 
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	void AssignOwner(AActor* myHolder);
 };

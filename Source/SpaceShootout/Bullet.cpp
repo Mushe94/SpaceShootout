@@ -25,3 +25,7 @@ void ABullet::Tick(float DeltaTime)
 	SetActorLocation(GetActorLocation() + GetActorForwardVector() * speed * DeltaTime);
 }
 
+void ABullet::AssignOwner(AActor* myMaster)
+{
+	this->myOwner = myMaster;
+}
