@@ -10,12 +10,14 @@ UCLASS()
 class SPACESHOOTOUT_API ABullet : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	ABullet();
 	UPROPERTY(EditAnywhere)
-	float speed;
+		float speed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float damage;
 
 protected:
 	// Called when the game starts or when spawned
@@ -23,9 +25,8 @@ protected:
 
 private:
 	UPROPERTY()
-	AActor* myOwner;
-
-public:	
+		AActor* myOwner;
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	void AssignOwner(AActor* myMaster);

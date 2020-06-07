@@ -7,7 +7,7 @@
 // Sets default values
 AFPSController::AFPSController()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 }
@@ -16,6 +16,8 @@ AFPSController::AFPSController()
 void AFPSController::BeginPlay()
 {
 	Super::BeginPlay();
+	startPosition = GetActorLocation();
+	isAlive = true;
 	weapon = FindComponentByClass<UWeapon>();
 	weapon->AssignOwner(GetOwner());
 }
@@ -24,7 +26,13 @@ void AFPSController::BeginPlay()
 void AFPSController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
 
+void AFPSController::Respawn()
+{
+	SetActorLocation(startPosition);
+	currentLife = 100;
+	isAlive = true;
 }
 
 // Called to bind functionality to input
@@ -39,6 +47,16 @@ void AFPSController::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis("Right", this, &AFPSController::MoveRight);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
+}
+
+void AFPSController::UpdatePoints(int points)
+{
+	currentPoints += points;
+}
+
+void AFPSController::TakeDamge(float damage)
+{
+	currentLife -= damage;
 }
 
 void AFPSController::MoveForward(float value)
@@ -59,10 +77,13 @@ void AFPSController::MoveRight(float value)
 
 void AFPSController::CharacterJump()
 {
-	Jump();
+
+		Jump();
+	
 }
 
 void AFPSController::Fire()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Dispare"));
 	weapon->Fire();
 }

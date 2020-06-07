@@ -35,10 +35,10 @@ void UWeapon::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponen
 
 void UWeapon::Fire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Some warning message"));
+	UE_LOG(LogTemp, Warning, TEXT("Entre"));
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(viewDirection, viewRotation);
 	ABullet* tempBullet = GetWorld()->SpawnActor<ABullet>(bullet, viewDirection, viewRotation);
-	tempBullet->AssignOwner(myOwner);
+	//tempBullet->AssignOwner(myOwner);
 }
 
 void UWeapon::AssignOwner(AActor* myHolder)

@@ -2,6 +2,7 @@
 
 
 #include "Bullet.h"
+#include "Components/BoxComponent.h"
 
 // Sets default values
 ABullet::ABullet()
@@ -15,7 +16,6 @@ ABullet::ABullet()
 void ABullet::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -29,3 +29,4 @@ void ABullet::AssignOwner(AActor* myMaster)
 {
 	this->myOwner = myMaster;
 }
+

@@ -13,7 +13,7 @@
 // Sets default values
 AEnemy::AEnemy()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 }
@@ -21,8 +21,7 @@ AEnemy::AEnemy()
 // Called when the game starts or when spawned
 void AEnemy::BeginPlay()
 {
-	Super::BeginPlay();
-	
+	Super::BeginPlay();	
 }
 
 // Called every frame
@@ -30,10 +29,16 @@ void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (ScanForPlayer())
+	if (isPlayerAlive && ScanForPlayer())
 	{
 		MoveToPlayer(DeltaTime);
 	}
+
+}
+
+void AEnemy::TakeDamge(float damage)
+{
+	enemyLife -= damage;
 }
 
 bool AEnemy::ScanForPlayer()
@@ -58,14 +63,16 @@ void AEnemy::MoveToPlayer(float DeltaTime)
 	if (FVector::Distance(GetActorLocation(), playerPosition) > fireDistance)
 	{
 		SetActorLocation(GetActorLocation() + GetActorForwardVector() * movementSpeed * DeltaTime);
-	} else
+	}
+	else
 	{
 		if (fireTimer >= fireCooldown)
 		{
+			fireTimer = 0.f;
 			ABullet* tempBullet = GetWorld()->SpawnActor<ABullet>(bullet, GetActorLocation() + offset, GetActorRotation());
 			tempBullet->AssignOwner(GetOwner());
-			fireTimer = 0.f;
-		} else
+		}
+		else
 		{
 			fireTimer += DeltaTime;
 		}

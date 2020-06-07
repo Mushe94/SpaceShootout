@@ -5,14 +5,15 @@
 #include "Engine.h"
 #include "Bullet.h"
 #include "GameFramework/Actor.h"
+#include "Entity.h"
 #include "Enemy.generated.h"
 
 UCLASS()
-class SPACESHOOTOUT_API AEnemy : public AActor
+class SPACESHOOTOUT_API AEnemy : public AActor, public IEntity
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	AEnemy();
 	UPROPERTY(EditAnywhere)
@@ -29,6 +30,10 @@ public:
 		float fireCooldown;
 	UPROPERTY(EditAnywhere)
 		FVector offset;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float enemyLife;
+	UPROPERTY(BlueprintReadWrite)
+		bool isPlayerAlive;
 
 protected:
 	// Called when the game starts or when spawned
@@ -41,8 +46,9 @@ private:
 
 	float fireTimer;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	UFUNCTION(BlueprintCallable)
+		void TakeDamge(float damage);
 };
