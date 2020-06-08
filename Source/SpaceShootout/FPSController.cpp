@@ -16,6 +16,7 @@ AFPSController::AFPSController()
 void AFPSController::BeginPlay()
 {
 	Super::BeginPlay();
+	startingLife = currentLife;
 	startPosition = GetActorLocation();
 	isAlive = true;
 	weapon = FindComponentByClass<UWeapon>();
@@ -31,7 +32,7 @@ void AFPSController::Tick(float DeltaTime)
 void AFPSController::Respawn()
 {
 	SetActorLocation(startPosition);
-	currentLife = 100;
+	currentLife = startingLife;
 	isAlive = true;
 }
 
@@ -77,9 +78,7 @@ void AFPSController::MoveRight(float value)
 
 void AFPSController::CharacterJump()
 {
-
-		Jump();
-	
+	Jump();
 }
 
 void AFPSController::Fire()

@@ -32,6 +32,8 @@ protected:
 private:
 	UPROPERTY()
 		FVector startPosition;
+	UPROPERTY()
+		float startingLife;
 
 	void MoveForward(float value);
 	void MoveRight(float value);
