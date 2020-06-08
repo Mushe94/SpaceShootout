@@ -62,10 +62,12 @@ void AEnemy::MoveToPlayer(float DeltaTime)
 	FVector playerPosition = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
 	if (FVector::Distance(GetActorLocation(), playerPosition) > fireDistance)
 	{
+		isMoving = true;
 		SetActorLocation(GetActorLocation() + GetActorForwardVector() * movementSpeed * DeltaTime);
 	}
 	else
 	{
+		isMoving = false;
 		if (fireTimer >= fireCooldown)
 		{
 			fireTimer = 0.f;

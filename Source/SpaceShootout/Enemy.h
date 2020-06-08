@@ -34,6 +34,8 @@ public:
 		float enemyLife;
 	UPROPERTY(BlueprintReadWrite)
 		bool isPlayerAlive;
+	UPROPERTY(BlueprintReadWrite)
+		bool isMoving;
 
 protected:
 	// Called when the game starts or when spawned

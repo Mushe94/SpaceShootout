@@ -21,7 +21,7 @@ void UWeapon::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+
 }
 
 
@@ -30,14 +30,28 @@ void UWeapon::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponen
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	if (fired)
+	{
+		fireTimer += DeltaTime;
+		if (fireTimer >= fireCooldown)
+		{
+			fired = false;
+			fireTimer = 0;
+		}
+	}
 }
 
 void UWeapon::Fire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Entre"));
-	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(viewDirection, viewRotation);
-	ABullet* tempBullet = GetWorld()->SpawnActor<ABullet>(bullet, viewDirection, viewRotation);
+	if (!fired)
+	{
+		fired = true;
+		fireEffect = true;
+
+		UE_LOG(LogTemp, Warning, TEXT("Entre"));
+		GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(viewDirection, viewRotation);
+		ABullet* tempBullet = GetWorld()->SpawnActor<ABullet>(bullet, viewDirection, viewRotation);
+	}
 	//tempBullet->AssignOwner(myOwner);
 }
 
