@@ -25,6 +25,11 @@ public:
 		int currentPoints;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool isAlive;
+	UPROPERTY()
+		UAudioComponent* audioComponent;
+	UPROPERTY(EditAnywhere)
+		USoundCue* runSound;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -39,6 +44,8 @@ private:
 	void MoveRight(float value);
 	void CharacterJump();
 	void Fire();
+	bool isGoingForwards;
+	bool isGoingSideways;
 
 	UWeapon* weapon;
 	// Called to bind functionality to input
@@ -48,7 +55,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	UFUNCTION(BlueprintCallable)
-		void TakeDamge(float damage);
+		bool TakeDamage(float damage);
 	UFUNCTION(BlueprintCallable)
 		void UpdatePoints(int points);
 	UFUNCTION(BlueprintCallable)

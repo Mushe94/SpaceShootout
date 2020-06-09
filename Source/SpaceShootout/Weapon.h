@@ -24,15 +24,14 @@ public:
 		float fireCooldown;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool fireEffect;
-
+	UPROPERTY(EditAnywhere)
+		FVector offset;
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 private:
-	FVector viewDirection;
-	FRotator viewRotation;
 	AActor* myOwner;
 	float fireTimer;
 	bool fired;

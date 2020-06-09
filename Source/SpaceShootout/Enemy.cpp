@@ -21,7 +21,8 @@ AEnemy::AEnemy()
 // Called when the game starts or when spawned
 void AEnemy::BeginPlay()
 {
-	Super::BeginPlay();	
+	Super::BeginPlay();
+	audioComponent = FindComponentByClass<UAudioComponent>();
 }
 
 // Called every frame
@@ -36,9 +37,10 @@ void AEnemy::Tick(float DeltaTime)
 
 }
 
-void AEnemy::TakeDamge(float damage)
+bool AEnemy::TakeDamage(float damage)
 {
 	enemyLife -= damage;
+	return enemyLife <= 0;
 }
 
 bool AEnemy::ScanForPlayer()
@@ -62,17 +64,29 @@ void AEnemy::MoveToPlayer(float DeltaTime)
 	FVector playerPosition = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
 	if (FVector::Distance(GetActorLocation(), playerPosition) > fireDistance)
 	{
+		if (audioComponent)
+		{
+			if (!audioComponent->IsPlaying())
+			{
+				audioComponent->SetSound(runSound);
+				audioComponent->Play();
+			}
+		}
 		isMoving = true;
 		SetActorLocation(GetActorLocation() + GetActorForwardVector() * movementSpeed * DeltaTime);
 	}
 	else
 	{
 		isMoving = false;
+		if (audioComponent)
+		{
+			audioComponent->Stop();
+		}
 		if (fireTimer >= fireCooldown)
 		{
 			fireTimer = 0.f;
 			ABullet* tempBullet = GetWorld()->SpawnActor<ABullet>(bullet, GetActorLocation() + offset, GetActorRotation());
-			tempBullet->AssignOwner(GetOwner());
+			//tempBullet->AssignOwner(GetOwner());
 		}
 		else
 		{

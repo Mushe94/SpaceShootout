@@ -21,6 +21,7 @@ void AFPSController::BeginPlay()
 	isAlive = true;
 	weapon = FindComponentByClass<UWeapon>();
 	weapon->AssignOwner(GetOwner());
+	audioComponent = FindComponentByClass<UAudioComponent>();
 }
 
 // Called every frame
@@ -55,16 +56,34 @@ void AFPSController::UpdatePoints(int points)
 	currentPoints += points;
 }
 
-void AFPSController::TakeDamge(float damage)
+bool AFPSController::TakeDamage(float damage)
 {
 	currentLife -= damage;
+	return currentLife <= 0;
 }
 
 void AFPSController::MoveForward(float value)
 {
 	if (value != 0.f)
 	{
+		if (audioComponent)
+		{
+			if (!audioComponent->IsPlaying())
+			{
+				audioComponent->SetSound(runSound);
+				audioComponent->Play();
+			}
+		}
+		isGoingForwards = true;
 		AddMovementInput(GetActorForwardVector(), value);
+	}
+	else
+	{
+		isGoingForwards = false;
+		if (!isGoingForwards && !isGoingSideways)
+		{
+			audioComponent->Stop();
+		}
 	}
 }
 
@@ -72,7 +91,24 @@ void AFPSController::MoveRight(float value)
 {
 	if (value != 0.f)
 	{
+		if (audioComponent)
+		{
+			if (!audioComponent->IsPlaying())
+			{
+				audioComponent->SetSound(runSound);
+				audioComponent->Play();
+			}
+		}
+		isGoingSideways = true;
 		AddMovementInput(GetActorRightVector(), value);
+	}
+	else
+	{
+		isGoingSideways = false;
+		if (!isGoingForwards && !isGoingSideways)
+		{
+			audioComponent->Stop();
+		}
 	}
 }
 

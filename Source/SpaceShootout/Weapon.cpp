@@ -29,30 +29,24 @@ void UWeapon::BeginPlay()
 void UWeapon::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	if (fired)
+	
+	if (fireTimer < fireCooldown)
 	{
 		fireTimer += DeltaTime;
-		if (fireTimer >= fireCooldown)
-		{
-			fired = false;
-			fireTimer = 0;
-		}
 	}
 }
 
 void UWeapon::Fire()
 {
-	if (!fired)
+	if (fireTimer >= fireCooldown)
 	{
-		fired = true;
 		fireEffect = true;
-
+		fireTimer = 0.f;
 		UE_LOG(LogTemp, Warning, TEXT("Entre"));
-		GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(viewDirection, viewRotation);
-		ABullet* tempBullet = GetWorld()->SpawnActor<ABullet>(bullet, viewDirection, viewRotation);
+		APawn* player = GetWorld()->GetFirstPlayerController()->GetPawn();
+		ABullet* tempBullet = GetWorld()->SpawnActor<ABullet>(bullet, player->GetActorLocation() + offset, player->GetActorRotation());
+		//tempBullet->AssignOwner(myOwner);
 	}
-	//tempBullet->AssignOwner(myOwner);
 }
 
 void UWeapon::AssignOwner(AActor* myHolder)

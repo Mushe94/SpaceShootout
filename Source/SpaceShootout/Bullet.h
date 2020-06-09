@@ -18,14 +18,13 @@ public:
 		float speed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float damage;
+	UPROPERTY(BlueprintReadWrite)
+		AActor* myOwner;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-private:
-	UPROPERTY()
-		AActor* myOwner;
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

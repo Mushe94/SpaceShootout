@@ -27,6 +27,6 @@ void ABullet::Tick(float DeltaTime)
 
 void ABullet::AssignOwner(AActor* myMaster)
 {
-	this->myOwner = myMaster;
+	myOwner = myMaster;
 }
 

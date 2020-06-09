@@ -36,6 +36,10 @@ public:
 		bool isPlayerAlive;
 	UPROPERTY(BlueprintReadWrite)
 		bool isMoving;
+	UPROPERTY()
+		UAudioComponent* audioComponent;
+	UPROPERTY(EditAnywhere)
+		USoundCue* runSound;
 
 protected:
 	// Called when the game starts or when spawned
@@ -52,5 +56,5 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	UFUNCTION(BlueprintCallable)
-		void TakeDamge(float damage);
+		bool TakeDamage(float damage);
 };
