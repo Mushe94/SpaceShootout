@@ -4,6 +4,7 @@
 
 #include "Engine.h"
 #include "Weapon.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/Character.h"
 #include "Entity.h"
 #include "FPSController.generated.h"

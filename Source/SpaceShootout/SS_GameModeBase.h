@@ -14,4 +14,11 @@ class SPACESHOOTOUT_API ASS_GameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	UFUNCTION(BlueprintCallable)
+		void EnableEnemies();
+	UFUNCTION(BlueprintCallable)
+		void DisableEnemies();
+	UFUNCTION(BlueprintCallable)
+		void RestartLevel();
 };

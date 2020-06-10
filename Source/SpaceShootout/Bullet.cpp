@@ -16,6 +16,10 @@ ABullet::ABullet()
 void ABullet::BeginPlay()
 {
 	Super::BeginPlay();
+	if (isCritical)
+	{
+		damage = criticalDamage;
+	}
 }
 
 // Called every frame

@@ -26,6 +26,10 @@ public:
 		bool fireEffect;
 	UPROPERTY(EditAnywhere)
 		FVector offset;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USkeletalMeshComponent* skeletalMesh;
+	UPROPERTY(EditAnywhere)
+		float criticalChance;
 
 protected:
 	// Called when the game starts
@@ -35,6 +39,10 @@ private:
 	AActor* myOwner;
 	float fireTimer;
 	bool fired;
+	UMaterialInstanceDynamic* dynamicMaterial;
+	bool isNextFireCritical;
+	bool materialCreated;
+	void CreateNewMaterial();
 
 public:
 	// Called every frame

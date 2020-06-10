@@ -20,7 +20,6 @@ void AFPSController::BeginPlay()
 	startPosition = GetActorLocation();
 	isAlive = true;
 	weapon = FindComponentByClass<UWeapon>();
-	weapon->AssignOwner(GetOwner());
 	audioComponent = FindComponentByClass<UAudioComponent>();
 }
 
@@ -70,7 +69,10 @@ void AFPSController::MoveForward(float value)
 		{
 			if (!audioComponent->IsPlaying())
 			{
-				audioComponent->SetSound(runSound);
+				if (audioComponent->Sound != runSound)
+				{
+					audioComponent->SetSound(runSound);
+				}
 				audioComponent->Play();
 			}
 		}
@@ -95,7 +97,10 @@ void AFPSController::MoveRight(float value)
 		{
 			if (!audioComponent->IsPlaying())
 			{
-				audioComponent->SetSound(runSound);
+				if (audioComponent->Sound != runSound)
+				{
+					audioComponent->SetSound(runSound);
+				}
 				audioComponent->Play();
 			}
 		}

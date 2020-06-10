@@ -3,6 +3,9 @@
 
 #include "Weapon.h"
 #include "Components/InputComponent.h"
+#include "Materials/MaterialInstanceDynamic.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Materials/MaterialInterface.h"
 
 // Sets default values for this component's properties
 UWeapon::UWeapon()
@@ -19,17 +22,31 @@ UWeapon::UWeapon()
 void UWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
-
+	myOwner = GetOwner();
+	if (skeletalMesh)
+	{
+		CreateNewMaterial();
+	}
 }
 
+void UWeapon::CreateNewMaterial()
+{
+	UMaterialInterface* material = skeletalMesh->GetMaterial(0);
+	dynamicMaterial = UMaterialInstanceDynamic::Create(material, NULL);
+	skeletalMesh->SetMaterial(0, dynamicMaterial);
+	materialCreated = true;
+}
 
 // Called every frame
 void UWeapon::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
+	if (!materialCreated && skeletalMesh)
+	{
+		CreateNewMaterial();
+	}
+
 	if (fireTimer < fireCooldown)
 	{
 		fireTimer += DeltaTime;
@@ -45,7 +62,21 @@ void UWeapon::Fire()
 		UE_LOG(LogTemp, Warning, TEXT("Entre"));
 		APawn* player = GetWorld()->GetFirstPlayerController()->GetPawn();
 		ABullet* tempBullet = GetWorld()->SpawnActor<ABullet>(bullet, player->GetActorLocation() + offset, player->GetActorRotation());
-		//tempBullet->AssignOwner(myOwner);
+		tempBullet->AssignOwner(myOwner);
+		if (isNextFireCritical)
+		{
+			tempBullet->isCritical = true;
+		}
+		if (FMath::RandRange(0.f, 1.f) < criticalChance)
+		{
+			isNextFireCritical = true;
+			dynamicMaterial->SetScalarParameterValue(TEXT("Critical"), 1.f);
+		}
+		else
+		{
+			isNextFireCritical = false;
+			dynamicMaterial->SetScalarParameterValue(TEXT("Critical"), 0.f);
+		}
 	}
 }
 

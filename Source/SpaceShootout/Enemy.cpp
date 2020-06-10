@@ -68,7 +68,10 @@ void AEnemy::MoveToPlayer(float DeltaTime)
 		{
 			if (!audioComponent->IsPlaying())
 			{
-				audioComponent->SetSound(runSound);
+				if (audioComponent->Sound != runSound)
+				{
+					audioComponent->SetSound(runSound);
+				}
 				audioComponent->Play();
 			}
 		}
@@ -86,7 +89,7 @@ void AEnemy::MoveToPlayer(float DeltaTime)
 		{
 			fireTimer = 0.f;
 			ABullet* tempBullet = GetWorld()->SpawnActor<ABullet>(bullet, GetActorLocation() + offset, GetActorRotation());
-			//tempBullet->AssignOwner(GetOwner());
+			tempBullet->AssignOwner(this);
 		}
 		else
 		{

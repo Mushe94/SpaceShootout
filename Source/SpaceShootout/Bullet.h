@@ -18,8 +18,12 @@ public:
 		float speed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float damage;
+	UPROPERTY(EditAnywhere)
+		float criticalDamage;
 	UPROPERTY(BlueprintReadWrite)
 		AActor* myOwner;
+	UPROPERTY()
+		bool isCritical;
 
 protected:
 	// Called when the game starts or when spawned
