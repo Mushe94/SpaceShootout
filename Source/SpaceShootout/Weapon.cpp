@@ -65,6 +65,7 @@ void UWeapon::Fire()
 		tempBullet->AssignOwner(myOwner);
 		if (isNextFireCritical)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Iscritical"));
 			tempBullet->isCritical = true;
 		}
 		if (FMath::RandRange(0.f, 1.f) < criticalChance)
