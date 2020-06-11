@@ -5,6 +5,7 @@
 #include "Engine.h"
 #include "Engine/World.h"
 #include "Components/ActorComponent.h"
+#include "Components/SceneComponent.h"
 #include "Bullet.h"
 #include "Weapon.generated.h"
 
@@ -24,12 +25,12 @@ public:
 		float fireCooldown;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool fireEffect;
-	UPROPERTY(EditAnywhere)
-		FVector offset;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		USkeletalMeshComponent* skeletalMesh;
 	UPROPERTY(EditAnywhere)
 		float criticalChance;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USceneComponent* spawnPoint;
 
 protected:
 	// Called when the game starts
