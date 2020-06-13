@@ -3,9 +3,6 @@
 
 #include "Bullet.h"
 #include "Components/BoxComponent.h"
-#include "Materials/MaterialInstanceDynamic.h"
-#include "Components/StaticMeshComponent.h"
-#include "Materials/MaterialInterface.h"
 
 // Sets default values
 ABullet::ABullet()
@@ -19,30 +16,16 @@ ABullet::ABullet()
 void ABullet::BeginPlay()
 {
 	Super::BeginPlay();
-	if (isCritical && !propertiesConfigured)
+	if (isCritical)
 	{
-		ConfigureProperties();
+		damage = criticalDamage;
 	}
-}
-
-void ABullet::ConfigureProperties()
-{
-	damage = criticalDamage;
-	UMaterialInterface* material = bulletStaticMesh->GetMaterial(0);
-	UMaterialInstanceDynamic* dynamicMaterial = UMaterialInstanceDynamic::Create(material, NULL);
-	bulletStaticMesh->SetMaterial(0, dynamicMaterial);
-	dynamicMaterial->SetScalarParameterValue(TEXT("Critical"), 1.f);
-	propertiesConfigured = true;
 }
 
 // Called every frame
 void ABullet::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (isCritical && bulletStaticMesh && !propertiesConfigured)
-	{
-		ConfigureProperties();
-	}
 	SetActorLocation(GetActorLocation() + GetActorForwardVector() * speed * DeltaTime);
 }
 
