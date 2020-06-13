@@ -61,10 +61,11 @@ void UWeapon::Fire()
 		fireTimer = 0.f;
 		UE_LOG(LogTemp, Warning, TEXT("Entre"));
 		APawn* player = GetWorld()->GetFirstPlayerController()->GetPawn();
-		ABullet* tempBullet = GetWorld()->SpawnActor<ABullet>(bullet, player->GetActorLocation() + offset, player->GetActorRotation());
+		ABullet* tempBullet = GetWorld()->SpawnActor<ABullet>(bullet, spawnPoint->GetComponentLocation(), spawnPoint->GetComponentRotation());
 		tempBullet->AssignOwner(myOwner);
 		if (isNextFireCritical)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Iscritical"));
 			tempBullet->isCritical = true;
 		}
 		if (FMath::RandRange(0.f, 1.f) < criticalChance)
