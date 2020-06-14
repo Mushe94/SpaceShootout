@@ -83,7 +83,7 @@ void AEnemy::MoveToPlayer(float DeltaTime)
 		{
 			fireTimer = 0.f;
 			ABullet* tempBullet = GetWorld()->SpawnActor<ABullet>(bullet, enemySkeletalMesh->GetSocketLocation("headSocket"), enemySkeletalMesh->GetSocketRotation("headSocket"));
-			//tempBullet->AssignOwner(this);
+			tempBullet->AssignOwner(GetOwner());
 		}
 		else
 		{
