@@ -24,8 +24,6 @@ public:
 		AActor* myOwner;
 	UPROPERTY()
 		bool isCritical;
-	UPROPERTY(BlueprintReadWrite)
-		UStaticMeshComponent* bulletStaticMesh;
 
 protected:
 	// Called when the game starts or when spawned
@@ -35,8 +33,4 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	void AssignOwner(AActor* myMaster);
-
-private:
-	bool propertiesConfigured;
-	void ConfigureProperties();
 };
