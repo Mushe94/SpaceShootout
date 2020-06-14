@@ -14,8 +14,8 @@ class SPACESHOOTOUT_API AEnemy : public AActor, public IEntity
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
 	AEnemy();
+	virtual void Tick(float DeltaTime) override;
 	UPROPERTY(EditAnywhere)
 		float viewDistance;
 	UPROPERTY(EditAnywhere)
@@ -28,8 +28,6 @@ public:
 		TSubclassOf<class ABullet> bullet;
 	UPROPERTY(EditAnywhere)
 		float fireCooldown;
-	UPROPERTY(EditAnywhere)
-		FVector offset;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float enemyLife;
 	UPROPERTY(BlueprintReadWrite)
@@ -40,21 +38,20 @@ public:
 		UAudioComponent* audioComponent;
 	UPROPERTY(EditAnywhere)
 		USoundCue* runSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USceneComponent* spawnPoint;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		USkeletalMeshComponent* enemySkeletalMesh;
+	UFUNCTION(BlueprintCallable)
+		bool TakeDamage(float damage);
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 private:
+	AActor* player;
 	bool ScanForPlayer();
 	void MoveToPlayer(float DeltaTime);
 	void LookAtPlayer(FVector playerPosition, float DeltaTime);
-
 	float fireTimer;
-
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-	UFUNCTION(BlueprintCallable)
-		bool TakeDamage(float damage);
 };

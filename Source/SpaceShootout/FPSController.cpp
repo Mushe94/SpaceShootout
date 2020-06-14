@@ -63,67 +63,78 @@ bool AFPSController::TakeDamage(float damage)
 
 void AFPSController::MoveForward(float value)
 {
-	if (value != 0.f)
+	if (currentLife > 0)
 	{
-		if (audioComponent)
+		if (value != 0.f)
 		{
-			if (!audioComponent->IsPlaying())
+			if (audioComponent)
 			{
-				if (audioComponent->Sound != runSound)
+				if (!audioComponent->IsPlaying())
 				{
-					audioComponent->SetSound(runSound);
+					if (audioComponent->Sound != runSound)
+					{
+						audioComponent->SetSound(runSound);
+					}
+					audioComponent->Play();
 				}
-				audioComponent->Play();
 			}
+			isGoingForwards = true;
+			AddMovementInput(GetActorForwardVector(), value);
 		}
-		isGoingForwards = true;
-		AddMovementInput(GetActorForwardVector(), value);
-	}
-	else
-	{
-		isGoingForwards = false;
-		if (!isGoingForwards && !isGoingSideways)
+		else
 		{
-			audioComponent->Stop();
+			isGoingForwards = false;
+			if (!isGoingForwards && !isGoingSideways)
+			{
+				audioComponent->Stop();
+			}
 		}
 	}
 }
 
 void AFPSController::MoveRight(float value)
 {
-	if (value != 0.f)
+	if (currentLife > 0)
 	{
-		if (audioComponent)
+		if (value != 0.f)
 		{
-			if (!audioComponent->IsPlaying())
+			if (audioComponent)
 			{
-				if (audioComponent->Sound != runSound)
+				if (!audioComponent->IsPlaying())
 				{
-					audioComponent->SetSound(runSound);
+					if (audioComponent->Sound != runSound)
+					{
+						audioComponent->SetSound(runSound);
+					}
+					audioComponent->Play();
 				}
-				audioComponent->Play();
 			}
+			isGoingSideways = true;
+			AddMovementInput(GetActorRightVector(), value);
 		}
-		isGoingSideways = true;
-		AddMovementInput(GetActorRightVector(), value);
-	}
-	else
-	{
-		isGoingSideways = false;
-		if (!isGoingForwards && !isGoingSideways)
+		else
 		{
-			audioComponent->Stop();
+			isGoingSideways = false;
+			if (!isGoingForwards && !isGoingSideways)
+			{
+				audioComponent->Stop();
+			}
 		}
 	}
 }
 
 void AFPSController::CharacterJump()
 {
-	Jump();
+	if (currentLife > 0)
+	{
+		Jump();
+	}
 }
 
 void AFPSController::Fire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Dispare"));
-	weapon->Fire();
+	if (currentLife > 0)
+	{
+		weapon->Fire();
+	}
 }

@@ -5,6 +5,7 @@
 #include "Engine/World.h"
 #include "FPSController.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "Engine/EngineTypes.h"
 #include "DrawDebugHelpers.h"
 #include "CollisionQueryParams.h"
@@ -23,6 +24,8 @@ void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	audioComponent = FindComponentByClass<UAudioComponent>();
+	audioComponent->SetSound(runSound);
+	player = GetWorld()->GetFirstPlayerController()->GetPawn();
 }
 
 // Called every frame
@@ -30,11 +33,10 @@ void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (isPlayerAlive && ScanForPlayer())
+	if (enemyLife > 0 && isPlayerAlive && ScanForPlayer())
 	{
 		MoveToPlayer(DeltaTime);
 	}
-
 }
 
 bool AEnemy::TakeDamage(float damage)
@@ -46,14 +48,10 @@ bool AEnemy::TakeDamage(float damage)
 bool AEnemy::ScanForPlayer()
 {
 	FHitResult hit;
-	FVector myPosition = GetActorLocation() + offset;
-	FVector playerPosition = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
 	FCollisionQueryParams collisionParams;
 	collisionParams.FCollisionQueryParams::AddIgnoredActor(this);
-	//DrawDebugLine(GetWorld(), myPosition, playerPosition, FColor::Green, false, 1.f, 0, 1.f);
-	if (GetWorld()->LineTraceSingleByChannel(hit, myPosition, playerPosition, ECollisionChannel::ECC_PhysicsBody, collisionParams))
+	if (GetWorld()->LineTraceSingleByChannel(hit, spawnPoint->GetComponentLocation(), player->GetActorLocation(), ECollisionChannel::ECC_PhysicsBody, collisionParams))
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *hit.GetActor()->GetName()));
 		return hit.GetActor()->GetName() == "BP_FPSController_C_0";
 	}
 	return false;
@@ -61,17 +59,13 @@ bool AEnemy::ScanForPlayer()
 
 void AEnemy::MoveToPlayer(float DeltaTime)
 {
-	FVector playerPosition = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
+	FVector playerPosition = player->GetActorLocation();
 	if (FVector::Distance(GetActorLocation(), playerPosition) > fireDistance)
 	{
 		if (audioComponent)
 		{
 			if (!audioComponent->IsPlaying())
 			{
-				if (audioComponent->Sound != runSound)
-				{
-					audioComponent->SetSound(runSound);
-				}
 				audioComponent->Play();
 			}
 		}
@@ -88,8 +82,8 @@ void AEnemy::MoveToPlayer(float DeltaTime)
 		if (fireTimer >= fireCooldown)
 		{
 			fireTimer = 0.f;
-			ABullet* tempBullet = GetWorld()->SpawnActor<ABullet>(bullet, GetActorLocation() + offset, GetActorRotation());
-			tempBullet->AssignOwner(this);
+			ABullet* tempBullet = GetWorld()->SpawnActor<ABullet>(bullet, enemySkeletalMesh->GetSocketLocation("headSocket"), enemySkeletalMesh->GetSocketRotation("headSocket"));
+			//tempBullet->AssignOwner(this);
 		}
 		else
 		{
@@ -101,9 +95,6 @@ void AEnemy::MoveToPlayer(float DeltaTime)
 
 void AEnemy::LookAtPlayer(FVector playerPosition, float DeltaTime)
 {
-	FRotator lookRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), playerPosition);
-	lookRotation = FRotator(0.f, lookRotation.Yaw, 0.f);
-	lookRotation = UKismetMathLibrary::RLerp(GetActorRotation(), lookRotation, rotationSpeed * DeltaTime, false);
-	lookRotation = FRotator(0.f, lookRotation.Yaw, 0.f);
-	SetActorRotation(lookRotation, ETeleportType::None);
+	float rotation = (playerPosition - GetActorLocation()).GetSafeNormal().Rotation().Yaw;
+	SetActorRotation(FRotator(0.f, rotation, 0.f));
 }
