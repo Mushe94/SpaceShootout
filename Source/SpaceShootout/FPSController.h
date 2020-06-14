@@ -7,6 +7,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/Character.h"
 #include "Entity.h"
+#include "Bullet.h"
 #include "FPSController.generated.h"
 
 class UInputComponent;
@@ -20,6 +21,8 @@ public:
 	// Sets default values for this character's properties
 	AFPSController();
 
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<class ABullet> bullet;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float currentLife;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -38,6 +41,8 @@ protected:
 private:
 	UPROPERTY()
 		FVector startPosition;
+	UPROPERTY()
+		FRotator startRotation;
 	UPROPERTY()
 		float startingLife;
 

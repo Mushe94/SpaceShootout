@@ -23,6 +23,8 @@ void UWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 	myOwner = GetOwner();
+	fireCooldown = 0.1f;
+	criticalChance = 0.1f;
 	if (skeletalMesh)
 	{
 		CreateNewMaterial();
@@ -59,8 +61,9 @@ void UWeapon::Fire()
 	{
 		fireEffect = true;
 		fireTimer = 0.f;
-		ABullet* tempBullet = GetWorld()->SpawnActor<ABullet>(bullet, spawnPoint->GetComponentLocation(), spawnPoint->GetComponentRotation());
-		tempBullet->AssignOwner(myOwner);
+		FActorSpawnParameters params;
+		params.Owner = myOwner;
+		ABullet* tempBullet = GetWorld()->SpawnActor<ABullet>(bullet, spawnPoint->GetComponentLocation(), spawnPoint->GetComponentRotation(), params);
 		if (isNextFireCritical)
 		{
 			tempBullet->isCritical = true;

@@ -18,8 +18,10 @@ void AFPSController::BeginPlay()
 	Super::BeginPlay();
 	startingLife = currentLife;
 	startPosition = GetActorLocation();
+	startRotation = GetActorRotation();
 	isAlive = true;
 	weapon = FindComponentByClass<UWeapon>();
+	weapon->bullet = bullet;
 	audioComponent = FindComponentByClass<UAudioComponent>();
 }
 
@@ -32,6 +34,7 @@ void AFPSController::Tick(float DeltaTime)
 void AFPSController::Respawn()
 {
 	SetActorLocation(startPosition);
+	SetActorRotation(startRotation);
 	currentLife = startingLife;
 	isAlive = true;
 }
