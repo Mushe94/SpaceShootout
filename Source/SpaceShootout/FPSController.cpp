@@ -20,6 +20,7 @@ void AFPSController::BeginPlay()
 	startPosition = GetActorLocation();
 	startRotation = GetActorRotation();
 	isAlive = true;
+	startingMovementSpeed = movementSpeed;
 	weapon = FindComponentByClass<UWeapon>();
 	weapon->bullet = bullet;
 	audioComponent = FindComponentByClass<UAudioComponent>();
@@ -82,7 +83,7 @@ void AFPSController::MoveForward(float value)
 				}
 			}
 			isGoingForwards = true;
-			AddMovementInput(GetActorForwardVector(), value);
+			AddMovementInput(GetActorForwardVector(), value * movementSpeed);
 		}
 		else
 		{
@@ -113,7 +114,7 @@ void AFPSController::MoveRight(float value)
 				}
 			}
 			isGoingSideways = true;
-			AddMovementInput(GetActorRightVector(), value);
+			AddMovementInput(GetActorRightVector(), value * movementSpeed);
 		}
 		else
 		{
@@ -140,4 +141,14 @@ void AFPSController::Fire()
 	{
 		weapon->Fire();
 	}
+}
+
+void AFPSController::ModifyMovementSpeed(float newSpeed)
+{
+	movementSpeed = newSpeed;
+}
+
+void AFPSController::RestoreMovementSpeed()
+{
+	movementSpeed = startingMovementSpeed;
 }

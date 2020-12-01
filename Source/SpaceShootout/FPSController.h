@@ -33,6 +33,10 @@ public:
 		UAudioComponent* audioComponent;
 	UPROPERTY(EditAnywhere)
 		USoundCue* runSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool isImmortal;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float movementSpeed;
 
 protected:
 	// Called when the game starts or when spawned
@@ -52,6 +56,7 @@ private:
 	void Fire();
 	bool isGoingForwards;
 	bool isGoingSideways;
+	float startingMovementSpeed;
 
 	UWeapon* weapon;
 	// Called to bind functionality to input
@@ -66,4 +71,8 @@ public:
 		void UpdatePoints(int points);
 	UFUNCTION(BlueprintCallable)
 		void Respawn();
+	UFUNCTION(BlueprintCallable)
+		void ModifyMovementSpeed(float newSpeed);
+	UFUNCTION(BlueprintCallable)
+		void RestoreMovementSpeed();
 };
